@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct TastyRecipesApp: App {
+    @StateObject private var vm = MealViewModel(networkService: NetworkServiceFactory.create())
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(vm)
         }
     }
 }
