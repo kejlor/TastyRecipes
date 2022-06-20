@@ -18,7 +18,7 @@ struct CategoriesHorizontalList: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack {
                     ForEach(categories.sorted(by: >), id: \.key) { key, value in
-                        NavigationLink(destination: MealsByCategoryView()) {
+                        NavigationLink(destination: MealsByCategoryView(category: key)) {
                             CategoryCard(categoryName: key, emoji: value)
                                 .foregroundColor(.orange)
                         }

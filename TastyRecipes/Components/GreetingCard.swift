@@ -16,11 +16,7 @@ struct GreetingCard: View {
                 .foregroundColor(Color.orange)
             
             GeometryReader { geometry in
-                AsyncImage(url: URL(string: "https://images.pexels.com/photos/1095550/pexels-photo-1095550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")) { image in
-                    image.resizable()
-                } placeholder: {
-                    Color.pink
-                }
+                DownloadingImageView(url: "https://images.pexels.com/photos/1095550/pexels-photo-1095550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2", key: "mainImage")
                 .frame(width: geometry.size.width, height: geometry.size.height)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
             }

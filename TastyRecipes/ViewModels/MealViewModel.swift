@@ -9,7 +9,9 @@ import Foundation
 
 class MealViewModel: ObservableObject {
     @Published var allMeals: Meals = Meals(meals: [Meal]())
+    @Published var categorizedMeals: Meals = Meals(meals: [Meal]())
     @Published var randomMeal: Meals = Meals(meals: [Meal]())
+    @Published var selectedMeal: Meals = Meals(meals: [Meal]())
     
     var networkService: NetworkService
     
@@ -25,7 +27,24 @@ class MealViewModel: ObservableObject {
             case .failure(let error):
                 print(error.localizedDescription)
             case .success(let meals):
-                self.allMeals = meals
+                DispatchQueue.main.async {
+                    self.allMeals = meals
+                }
+            }
+        }
+    }
+    
+    func getMealById(id: String) {
+        guard let url = URL(string: "www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)") else { return }
+        
+        self.networkService.downloadData(of: Meals.self, from: url) { (result) in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let meals):
+                DispatchQueue.main.async {
+                    self.selectedMeal = meals
+                }
             }
         }
     }
@@ -33,18 +52,16 @@ class MealViewModel: ObservableObject {
     func getRandomMeal() {
         guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/random.php") else { return }
         
-        print("getting random meal")
-        
         self.networkService.downloadData(of: Meals.self, from: url) { (result) in
             switch result {
             case .failure(let error):
                 print(error.localizedDescription)
             case .success(let meals):
-                self.randomMeal = meals
+                DispatchQueue.main.async {
+                    self.randomMeal = meals
+                }
             }
         }
-        
-        print("got: \(randomMeal.meals.count)")
     }
     
     func getMealsByFirstLetter(letter: String) {
@@ -55,7 +72,24 @@ class MealViewModel: ObservableObject {
             case .failure(let error):
                 print(error.localizedDescription)
             case .success(let meals):
-                self.allMeals = meals
+                DispatchQueue.main.async {
+                    self.allMeals = meals
+                }
+            }
+        }
+    }
+    
+    func getMealsByCategory(category: String) {
+        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(category)") else { return }
+        
+        self.networkService.downloadData(of: Meals.self, from: url) { (result) in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let meals):
+                DispatchQueue.main.async {
+                    self.categorizedMeals = meals
+                }
             }
         }
     }
