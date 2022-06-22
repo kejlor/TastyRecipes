@@ -14,6 +14,8 @@ struct ContentView: View {
         ZStack {
             NavigationView {
                 VStack {
+                    CustomSearchBar(searchText: $vm.searchText)
+                    
                     GreetingCard()
                     
                     RandomMealButton()
