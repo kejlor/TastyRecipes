@@ -12,6 +12,7 @@ class MealViewModel: ObservableObject {
     @Published var categorizedMeals: Meals = Meals(meals: [Meal]())
     @Published var randomMeal: Meals = Meals(meals: [Meal]())
     @Published var selectedMeal: Meals = Meals(meals: [Meal]())
+    @Published var searchText = ""
     
     var networkService: NetworkService
     
@@ -35,7 +36,7 @@ class MealViewModel: ObservableObject {
     }
     
     func getMealById(id: String) {
-        guard let url = URL(string: "www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)") else { return }
+        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/lookup.php?i=\(id)") else { return }
         
         self.networkService.downloadData(of: Meals.self, from: url) { (result) in
             switch result {
