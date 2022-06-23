@@ -23,6 +23,7 @@ struct MealView: View {
                 }
             }
         }
+        .background(.regularMaterial)
         .onAppear() { vm.getMealById(id: meal?.idMeal ?? "0") }
     }
 }
@@ -44,6 +45,7 @@ extension MealView {
                     .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
+        .padding(.vertical)
         .padding(.horizontal)
     }
     
@@ -51,6 +53,15 @@ extension MealView {
         HStack {
             VStack {
                 Text("Ingredients")
+                    .font(.title3)
+                    .foregroundColor(.orange)
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(.white)
+                            .shadow(
+                                color: Color.orange.opacity(0.15),
+                                radius: 10, x: 0, y: 0)
+                    )
                 Text(vm.selectedMeal.meals[0].strIngredient1 ?? "")
                 Text(vm.selectedMeal.meals[0].strIngredient2 ?? "")
                 Text(vm.selectedMeal.meals[0].strIngredient3 ?? "")
@@ -60,6 +71,15 @@ extension MealView {
             
             VStack {
                 Text("Measures")
+                    .font(.title3)
+                    .foregroundColor(.orange)
+                    .background(
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(.white)
+                            .shadow(
+                                color: Color.orange.opacity(0.15),
+                                radius: 10, x: 0, y: 0)
+                    )
                 Text(vm.selectedMeal.meals[0].strMeasure1 ?? "")
                 Text(vm.selectedMeal.meals[0].strMeasure2 ?? "")
                 Text(vm.selectedMeal.meals[0].strMeasure3 ?? "")
@@ -67,16 +87,24 @@ extension MealView {
                 Text(vm.selectedMeal.meals[0].strMeasure5 ?? "")
             }
         }
+        .padding()
     }
     
     private var mealPrepDescription: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                Text(vm.selectedMeal.meals[0].strInstructions ?? "")
-                    .lineLimit(nil)
-                    .frame(width: geometry.size.width - 50)
-                    .padding()
+        VStack(alignment: .leading, spacing: 0) {
+           Text("Recipe")
+                .font(.title)
+            
+            GeometryReader { geometry in
+                ScrollView {
+                    Text(vm.selectedMeal.meals[0].strInstructions ?? "")
+                        .lineLimit(nil)
+                        .frame(width: geometry.size.width - 50)
+                        .padding()
+                }
             }
         }
+        .padding()
+        .padding(.bottom, 20)
     }
 }

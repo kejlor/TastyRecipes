@@ -21,7 +21,6 @@ struct DownloadingImageView: View {
             } else if let image = loader.image {
                 Image(uiImage: image)
                     .resizable()
-//                    .frame(width: 100, height: 100)
                     .clipShape(RoundedRectangle(cornerRadius: 25))
             }
         }
