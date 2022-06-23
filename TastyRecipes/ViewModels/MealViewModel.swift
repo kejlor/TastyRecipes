@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class MealViewModel: ObservableObject {
     @Published var allMeals: Meals = Meals(meals: [Meal]())
@@ -14,14 +15,29 @@ class MealViewModel: ObservableObject {
     @Published var selectedMeal: Meals = Meals(meals: [Meal]())
     @Published var searchText = ""
     
+    private var cancellables = Set<AnyCancellable>()
+    
     var networkService: NetworkService
     
     init(networkService: NetworkService) {
         self.networkService = networkService
+        debounceAfterSearching()
     }
     
-    func getMealByName(name: String) {
-        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/search.php?s=\(name)") else { return }
+    private func debounceAfterSearching() {
+        $searchText
+            .debounce(for: .seconds(1), scheduler: DispatchQueue.main)
+            .sink { searchText in
+                self.allMeals = Meals(meals: [Meal]())
+                if(searchText.count > 3) {
+                    self.getMealByName()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getMealByName() {
+        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/search.php?s=\(searchText)") else { return }
         
         self.networkService.downloadData(of: Meals.self, from: url) { (result) in
             switch result {
@@ -64,22 +80,7 @@ class MealViewModel: ObservableObject {
             }
         }
     }
-    
-    func getMealsByFirstLetter(letter: String) {
-        guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/search.php?f=\(letter)") else { return }
         
-        self.networkService.downloadData(of: Meals.self, from: url) { (result) in
-            switch result {
-            case .failure(let error):
-                print(error.localizedDescription)
-            case .success(let meals):
-                DispatchQueue.main.async {
-                    self.allMeals = meals
-                }
-            }
-        }
-    }
-    
     func getMealsByCategory(category: String) {
         guard let url = URL(string: "https://www.themealdb.com/api/json/v1/1/filter.php?c=\(category)") else { return }
         
