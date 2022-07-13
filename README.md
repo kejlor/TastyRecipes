@@ -18,7 +18,7 @@ your desired meal, you will get informed.
 <br>
 
 ### Screenshots
-<img src="Images/homeScreen.png>
-<img src="Images/getRandomMeal.gif>
-<img src="Images/browseMeals.gif>
-<img src="Images/searchForMeal.gif>
+<img src="Images/homeScreen.png">
+<img src="Images/getRandomMeal.gif">
+<img src="Images/browseMeals.gif">
+<img src="Images/searchForMeal.gif">
