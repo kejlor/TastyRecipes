@@ -16,6 +16,8 @@ struct SearchingView: View {
             
             if(vm.allMeals.meals.isEmpty) {
                 Text("Can't find this dish")
+                
+                Spacer()
             } else {
                 MealView(meal: vm.allMeals.meals[0])
             }
